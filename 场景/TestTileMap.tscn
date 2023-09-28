@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://duiiv0r36pshu"]
+
+[ext_resource type="Script" path="res://脚本/tile_map.gd" id="1_t7xtu"]
+[ext_resource type="TileSet" uid="uid://dxqnu1c3hpe1f" path="res://资源/TileSet.tres" id="1_xwd6c"]
+
+[node name="TileMap" type="TileMap"]
+tile_set = ExtResource("1_xwd6c")
+format = 2
+layer_0/tile_data = PackedInt32Array(0, 0, 0, 65536, 0, 0, 1, 0, 0, 65537, 0, 0, 2, 0, 0, 65538, 0, 0)
+script = ExtResource("1_t7xtu")
