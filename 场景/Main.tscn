@@ -1,0 +1,43 @@
+[gd_scene load_steps=5 format=3 uid="uid://dtrambinifw0q"]
+
+[ext_resource type="Script" path="res://脚本/Main.gd" id="1_sb2qo"]
+[ext_resource type="PackedScene" uid="uid://sqd755ldubih" path="res://场景/tile_map.tscn" id="1_ui0cf"]
+
+[sub_resource type="Animation" id="Animation_4lk67"]
+resource_name = "显示面板"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_h3dro"]
+_data = {
+"显示面板": SubResource("Animation_4lk67")
+}
+
+[node name="Node" type="Node"]
+script = ExtResource("1_sb2qo")
+
+[node name="TileMap" parent="." instance=ExtResource("1_ui0cf")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("")
+libraries = {
+"": SubResource("AnimationLibrary_h3dro")
+}
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+offset_left = 440.0
+offset_top = 260.0
+offset_right = 840.0
+offset_bottom = 460.0
+color = Color(0.239216, 0.239216, 0.239216, 1)
+
+[node name="Button" type="Button" parent="CanvasLayer/ColorRect"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 120.0
+offset_bottom = 80.0
+theme_override_font_sizes/font_size = 32
+text = "前进"
+
+[connection signal="pressed" from="CanvasLayer/ColorRect/Button" to="." method="on_forward_pressed"]

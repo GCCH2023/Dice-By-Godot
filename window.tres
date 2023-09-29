@@ -1,0 +1,12 @@
+[gd_resource type="StyleBoxTexture" load_steps=2 format=3 uid="uid://cj3kobx6tadeb"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_dh7am"]
+load_path = "res://.godot/imported/001-Blue01.png-f3a4b3ff12486426325e5e7bd9c6fc1a.ctex"
+
+[resource]
+texture = SubResource("CompressedTexture2D_dh7am")
+texture_margin_left = 14.3702
+texture_margin_top = 9.11284
+texture_margin_right = 12.2673
+texture_margin_bottom = 16.1227
+region_rect = Rect2(0, 0, 128, 128)
