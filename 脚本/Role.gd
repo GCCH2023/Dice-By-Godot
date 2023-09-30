@@ -1,8 +1,9 @@
 extends CharacterBody2D
 
-@export var SPEED : int = 100
-@export var RoleName : String
-@export var IsPlayer : bool = false
+@export var 移动速度 : int = 100
+@export var 名称 : String
+@export var 是否玩家 : bool = false
+@export var 资金 : int = 10000
 
 signal move_end(role : Node2D)
 
@@ -26,7 +27,7 @@ func move_left(cell = 1):
 	is_moving = true
 	target = position + Vector2(-CELL * cell, 0)
 	$Animation.play("向左")
-	direction = Vector2i.DOWN
+	direction = Vector2i.LEFT
 	
 func move_right(cell = 1):
 	is_moving = true
@@ -99,6 +100,6 @@ func _process(delta):
 				is_end_moving = true
 				move_finished()	# 移动结束
 		else:
-			position = position.move_toward(target, delta * SPEED)	# 修改位置
+			position = position.move_toward(target, delta * 移动速度)	# 修改位置
 	elif !queue.is_empty():
 		move()

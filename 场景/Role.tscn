@@ -3,9 +3,10 @@
 [ext_resource type="SpriteFrames" uid="uid://q66jb7e8rew8" path="res://资源/Role.tres" id="1_wyavt"]
 
 [node name="Role" type="CharacterBody2D"]
+platform_floor_layers = 4294901760
 
 [node name="Animation" type="AnimatedSprite2D" parent="."]
 sprite_frames = ExtResource("1_wyavt")
 animation = &"向左"
 centered = false
-offset = Vector2(-16, -48)
+offset = Vector2(-16, -32)

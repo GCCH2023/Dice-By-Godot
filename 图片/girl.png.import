@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bxppl8jge0h82"
-path="res://.godot/imported/009-G2_Water01.png-26b0df41b2fd9f56a1cd609198812601.ctex"
+uid="uid://c5ujllaj1qcrq"
+path="res://.godot/imported/girl.png-d2e1f7dcc4af45ec88dca6367757e2c8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://图片/009-G2_Water01.png"
-dest_files=["res://.godot/imported/009-G2_Water01.png-26b0df41b2fd9f56a1cd609198812601.ctex"]
+source_file="res://图片/girl.png"
+dest_files=["res://.godot/imported/girl.png-d2e1f7dcc4af45ec88dca6367757e2c8.ctex"]
 
 [params]
 

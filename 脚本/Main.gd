@@ -94,8 +94,11 @@ func get_move_one(pos : Vector2i, dir : Vector2i):
 func move_role(role : Node2D, step : int):
 	var role_pos = $TileMap.get_role_position(role)
 	var direction = $TileMap.get_role_direction(role)
-	print("角色 ", role.RoleName, " 位置 : ", role_pos, " 朝向 : ", direction)
+	print("角色 ", role.名称, " 位置 : ", role_pos, " 朝向 : ", direction)
 	
+#	role_pos = Vector2i(3, 10)
+#	direction = Vector2.LEFT
+#	step = 3
 	var last_vec = Vector2i.ZERO
 	var count = 0
 	for i in range(0, step):
@@ -122,11 +125,11 @@ func show_player_panel():
 # 开始指定玩家的回合
 func role_turn(role : Node2D):
 	current = role
-	if role.IsPlayer:
-		print("\n开始玩家 ", role.RoleName, " 的回合")
+	if role.是否玩家:
+		print("\n开始玩家 ", role.名称, " 的回合")
 		show_player_panel()
 	else:
-		print("\n开始电脑 ", role.RoleName, " 的回合")
+		print("\n开始电脑 ", role.名称, " 的回合")
 		dice_and_move()
 	
 # 切换到下一个玩家
@@ -136,7 +139,7 @@ func switch_role():
 func dice_and_move():
 	var n = randi_range(1, 6)
 	print("骰子掷出了", n, "点")
-	$CanvasLayer/ColorRect/Label.text = "%s 骰子掷出了 %d 点" % [current.RoleName, n]
+	$CanvasLayer/ColorRect/Label.text = "%s 骰子掷出了 %d 点" % [current.名称, n]
 	# 生成移动路线
 	move_role(current, n)
 	

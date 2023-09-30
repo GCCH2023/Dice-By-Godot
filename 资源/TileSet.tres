@@ -1,10 +1,9 @@
-[gd_resource type="TileSet" load_steps=5 format=3 uid="uid://dxqnu1c3hpe1f"]
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://dxqnu1c3hpe1f"]
 
-[ext_resource type="Texture2D" uid="uid://6wqo8xyru7bt" path="res://图片/modified_image.png" id="1_cds0s"]
-[ext_resource type="Texture2D" uid="uid://bxppl8jge0h82" path="res://图片/009-G2_Water01.png" id="2_br2rk"]
+[ext_resource type="Texture2D" uid="uid://6wqo8xyru7bt" path="res://图片/scene.png" id="1_o8ph4"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_q6wa6"]
-texture = ExtResource("1_cds0s")
+texture = ExtResource("1_o8ph4")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
@@ -443,28 +442,6 @@ texture_region_size = Vector2i(32, 32)
 7:17/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 7:17/0/physics_layer_0/angular_velocity = 0.0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_c47nj"]
-texture = ExtResource("2_br2rk")
-texture_region_size = Vector2i(32, 32)
-0:1/0 = 0
-0:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
-0:1/0/physics_layer_0/angular_velocity = 0.0
-0:2/animation_columns = 4
-0:2/animation_frame_0/duration = 1.0
-0:2/animation_frame_1/duration = 1.0
-0:2/animation_frame_2/duration = 1.0
-0:2/animation_frame_3/duration = 1.0
-0:2/0 = 0
-0:2/0/physics_layer_0/linear_velocity = Vector2(0, 0)
-0:2/0/physics_layer_0/angular_velocity = 0.0
-0:0/animation_columns = 2
-0:0/0 = 0
-0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
-0:0/0/physics_layer_0/angular_velocity = 0.0
-0:3/0 = 0
-0:3/0/physics_layer_0/linear_velocity = Vector2(0, 0)
-0:3/0/physics_layer_0/angular_velocity = 0.0
-
 [resource]
 tile_size = Vector2i(32, 32)
 physics_layer_0/collision_layer = 1
@@ -472,4 +449,3 @@ terrain_set_0/mode = 0
 terrain_set_0/terrain_0/name = "Terrain 0"
 terrain_set_0/terrain_0/color = Color(0.5, 0.34375, 0.25, 1)
 sources/0 = SubResource("TileSetAtlasSource_q6wa6")
-sources/1 = SubResource("TileSetAtlasSource_c47nj")

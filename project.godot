@@ -13,7 +13,6 @@ config_version=5
 config/name="Dice"
 run/main_scene="res://场景/Main.tscn"
 config/features=PackedStringArray("4.1", "Forward Plus")
-config/icon="res://icon.svg"
 
 [display]
 

@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://dtrambinifw0q"]
 
 [ext_resource type="Script" path="res://脚本/Main.gd" id="1_sb2qo"]
-[ext_resource type="PackedScene" uid="uid://sqd755ldubih" path="res://场景/tile_map.tscn" id="1_ui0cf"]
+[ext_resource type="PackedScene" uid="uid://sqd755ldubih" path="res://场景/Tilemap.tscn" id="1_ui0cf"]
 
 [sub_resource type="Animation" id="Animation_4lk67"]
 resource_name = "显示面板"
@@ -50,8 +50,6 @@ offset_top = -112.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_font_sizes/font_size = 24
-text = "玩家1 掷出了 6 点
-玩家2"
 
 [connection signal="move_end" from="TileMap" to="." method="on_role_move_end"]
 [connection signal="pressed" from="CanvasLayer/ColorRect/Button" to="." method="on_forward_pressed"]

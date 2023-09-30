@@ -19,10 +19,10 @@ func _ready():
 		children[i].next = children[(i + 1) % children.size()]
 		children[i].prev = children[(i + children.size() -1) % children.size()]
 		children[i].move_end.connect(on_role_move_end)
-	print($Role.next.RoleName)
+	print($Role.next.名称)
 
 func on_role_move_end(role : Node2D):
-	print("角色 ", role.RoleName, " 回合结束")
+	print("角色 ", role.名称, " 回合结束")
 	await get_tree().create_timer(0.5).timeout
 	emit_signal("move_end")
 	
