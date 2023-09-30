@@ -29,7 +29,7 @@ offset_left = 440.0
 offset_top = 260.0
 offset_right = 840.0
 offset_bottom = 460.0
-color = Color(0.239216, 0.239216, 0.239216, 1)
+color = Color(0.239216, 0.239216, 0.239216, 0.317647)
 
 [node name="Button" type="Button" parent="CanvasLayer/ColorRect"]
 layout_mode = 0
@@ -40,4 +40,18 @@ offset_bottom = 80.0
 theme_override_font_sizes/font_size = 32
 text = "前进"
 
+[node name="Label" type="Label" parent="CanvasLayer/ColorRect"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -112.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 24
+text = "玩家1 掷出了 6 点
+玩家2"
+
+[connection signal="move_end" from="TileMap" to="." method="on_role_move_end"]
 [connection signal="pressed" from="CanvasLayer/ColorRect/Button" to="." method="on_forward_pressed"]

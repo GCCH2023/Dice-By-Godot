@@ -22,15 +22,20 @@ script = ExtResource("2_c825r")
 [node name="Role" parent="." instance=ExtResource("3_e1xg6")]
 position = Vector2(80, 95)
 script = ExtResource("4_cfssw")
+RoleName = "狗蛋"
+IsPlayer = true
 
 [node name="Role2" parent="." instance=ExtResource("3_e1xg6")]
 position = Vector2(80, 669)
 script = ExtResource("4_cfssw")
+RoleName = "王德法"
 
 [node name="Role3" parent="." instance=ExtResource("3_e1xg6")]
 position = Vector2(1200, 95)
 script = ExtResource("4_cfssw")
+RoleName = "旺财"
 
 [node name="Role4" parent="." instance=ExtResource("3_e1xg6")]
 position = Vector2(1200, 669)
 script = ExtResource("4_cfssw")
+RoleName = "狗多"

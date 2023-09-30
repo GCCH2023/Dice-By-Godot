@@ -2,6 +2,7 @@ class_name Role
 extends Node
 
 
+
 # 图集属性
 # 0 道路, 可以同行
 # 1 障碍, 不可同行
@@ -32,6 +33,8 @@ const directions = [Vector2i.LEFT, Vector2i.UP, Vector2i.RIGHT, Vector2i.DOWN]
 
 # 地图属性数据
 var map = []
+# 当前角色
+var current : Node2D
 
 func gen_map():
 	var layer_count = $TileMap.get_layers_count()
@@ -54,6 +57,10 @@ func _ready():
 	print("tile_set[1][2] = ", tile_set[tile_set_pos.y][tile_set_pos.x])
 	print("map[1][2] = ",  map[v.y][v.x])
 	print(get_move_one(Vector2i(9, 2), Vector2i.RIGHT))
+	role_turn($TileMap/Role)
+	
+func on_role_move_end():
+	switch_role()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -85,25 +92,56 @@ func get_move_one(pos : Vector2i, dir : Vector2i):
 	return can_pass_vecs
 			
 func move_role(role : Node2D, step : int):
-	var role_pos = $TileMap.get_role_position(0)
-	print("主角位置 : ", role_pos)
-	var direction = $TileMap.get_role_direction(0)
-	print("主角朝向: ", direction)
+	var role_pos = $TileMap.get_role_position(role)
+	var direction = $TileMap.get_role_direction(role)
+	print("角色 ", role.RoleName, " 位置 : ", role_pos, " 朝向 : ", direction)
 	
+	var last_vec = Vector2i.ZERO
+	var count = 0
 	for i in range(0, step):
 		var can_pass_vecs = get_move_one(role_pos, direction)	# 可同行向量
 		# 如果有多个可通行向量, 则随机选择一个
 		var v = can_pass_vecs[randi_range(0, can_pass_vecs.size() - 1)]
-		role.add_move_by_vec(v)
+		# 尝试合并当前向量和上一个向量
+		if v == last_vec:
+			count += 1
+		else:
+			if count > 0:
+				role.add_move_by_vec(last_vec, count)
+			last_vec = v
+			count = 1
 		role_pos += v
 		direction = v
 	
-# 前进
-func on_forward_pressed():
+	if count > 0:
+		role.add_move_by_vec(last_vec, count)
+	
+func show_player_panel():
+	$CanvasLayer/ColorRect/Button.show()
+	
+# 开始指定玩家的回合
+func role_turn(role : Node2D):
+	current = role
+	if role.IsPlayer:
+		print("\n开始玩家 ", role.RoleName, " 的回合")
+		show_player_panel()
+	else:
+		print("\n开始电脑 ", role.RoleName, " 的回合")
+		dice_and_move()
+	
+# 切换到下一个玩家
+func switch_role():
+	role_turn(current.next)
+	
+func dice_and_move():
 	var n = randi_range(1, 6)
 	print("骰子掷出了", n, "点")
-	
-	
-	
+	$CanvasLayer/ColorRect/Label.text = "%s 骰子掷出了 %d 点" % [current.RoleName, n]
 	# 生成移动路线
-	move_role($TileMap/Role, n)
+	move_role(current, n)
+	
+# 前进
+func on_forward_pressed():
+	$CanvasLayer/ColorRect/Button.hide()
+	dice_and_move()
+	
