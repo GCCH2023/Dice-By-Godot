@@ -54,5 +54,5 @@ func _on_seq_button_pressed():
 	GCAM.MoveBy.new($Sprite2D, Vector2(0, 400), 0.5),
 	GCAM.MoveBy.new($Sprite2D, Vector2(-400, 0), 0.5),
 	GCAM.MoveBy.new($Sprite2D, Vector2(0, -400), 0.5)]
-	AnimationManager.sequence(anims)
+	AnimationManager.sequence(anims, false, 3)
 

@@ -29,6 +29,11 @@ class GCAnimation:
 		self.is_flipping = false
 		self.is_finished = false
 		
+	# 重置动画计时器
+	func reset():
+		timer = 0
+		is_finished = false
+		
 	# 修改节点的属性
 	# time 的含义视具体情况而定
 	func change(time:float):
@@ -63,7 +68,7 @@ class GCAnimation:
 				timer = duration
 			elif loop_count > 1:	# 不需要翻转, 那么判断是否循环
 				loop_count -= 1
-				timer = 0
+				reset()
 			else:	# 结束动画
 				on_finished()
 				return
@@ -75,7 +80,7 @@ class GCAnimation:
 			else:		# 循环下一次
 				loop_count -= 1
 				is_flipping = false
-				timer = 0
+				reset()
 			before_next()
 
 # 目标值动画
@@ -239,30 +244,32 @@ class ScaleRatio extends  TargetAnimation:
 class SequenceAnimation extends GCAnimation:
 	var anims : Array
 	var current : GCAnimation
+	var index : int
 	
-	func _init(anims):
-		super._init(null, 0, false, 1)
+	func _init(anims:Array, is_flip:bool=false, loop_count:int=1):
+		super._init(null, 0, is_flip, loop_count)
 		self.anims = anims
+		self.index = 0
 		next_animation()
 		
 	func next_animation():
-		current = anims.pop_front()
+		current = anims[index]
+		current.reset()
 		#current.finished.connect(on_anim_finished)
-		
-	func on_anim_finished():
-		#current.finished.disconnect(next_animation)
-		if anims.is_empty():
-			current = null
-		else:
-			next_animation();
 		
 	# delta 是 _process 的参数
 	func update(delta:float):
 		current.update(delta)
 		if current.is_finished:
-			if anims.is_empty():
-				on_finished()
+			if index + 1 >= anims.size():
+				if loop_count <= 1:
+					on_finished()
+				else:
+					loop_count -= 1
+					index = 0
+					next_animation()
 			else:
+				index += 1
 				next_animation()
 	
 # 将节点node平移用duration指定的时间到指定位置target
@@ -320,8 +327,10 @@ func scale_ratio(node:Node2D, ratio:Vector2, duration:float, is_flip:bool=false,
 	
 # 创建一个动画序列
 # 动画序列可以包含并同步播放多个动画
-func sequence(anims):
-	var anim = SequenceAnimation.new(anims)
+func sequence(anims:Array, is_flip:bool=false, loop_count:int=1):
+	if anims.is_empty():
+		return
+	var anim = SequenceAnimation.new(anims, is_flip, loop_count)
 	add_anim(anim)
 	return anim
 	
