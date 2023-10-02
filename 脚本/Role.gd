@@ -103,3 +103,8 @@ func _process(delta):
 			position = position.move_toward(target, delta * 移动速度)	# 修改位置
 	elif !queue.is_empty():
 		move()
+
+# 角色获得回合时
+func on_turn():
+	#$Camera2D.make_current()
+	pass

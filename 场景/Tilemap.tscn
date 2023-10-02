@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://脚本/Role.gd" id="4_cfssw"]
 
 [node name="TileMap" type="TileMap"]
+scale = Vector2(1.5, 1.5)
 tile_set = ExtResource("1_huj11")
 cell_quadrant_size = 32
 format = 2

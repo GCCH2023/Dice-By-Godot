@@ -1,0 +1,87 @@
+[gd_scene load_steps=4 format=3 uid="uid://qa7lss5oi3si"]
+
+[ext_resource type="PackedScene" uid="uid://sqd755ldubih" path="res://场景/Tilemap.tscn" id="1_lmeuq"]
+[ext_resource type="Script" path="res://脚本/Test.gd" id="1_qlkcd"]
+[ext_resource type="Texture2D" uid="uid://rbek5yq1hc04" path="res://图片/icon.svg" id="3_f5sy3"]
+
+[node name="Node" type="Node"]
+script = ExtResource("1_qlkcd")
+
+[node name="TileMap" parent="." instance=ExtResource("1_lmeuq")]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -100.0
+offset_right = 200.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.239216, 0.239216, 0.239216, 0.317647)
+
+[node name="Button" type="Button" parent="CanvasLayer/ColorRect"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 9.0
+offset_right = 120.0
+offset_bottom = 69.0
+theme_override_font_sizes/font_size = 32
+text = "平移"
+
+[node name="Button2" type="Button" parent="CanvasLayer/ColorRect"]
+layout_mode = 0
+offset_left = 21.0
+offset_top = 75.0
+offset_right = 121.0
+offset_bottom = 135.0
+theme_override_font_sizes/font_size = 32
+text = "旋转"
+
+[node name="Button3" type="Button" parent="CanvasLayer/ColorRect"]
+layout_mode = 0
+offset_left = 21.0
+offset_top = 138.0
+offset_right = 121.0
+offset_bottom = 198.0
+theme_override_font_sizes/font_size = 32
+text = "缩放"
+
+[node name="Button4" type="Button" parent="CanvasLayer/ColorRect"]
+layout_mode = 0
+offset_left = 137.0
+offset_top = 139.0
+offset_right = 237.0
+offset_bottom = 199.0
+theme_override_font_sizes/font_size = 32
+text = "序列"
+
+[node name="Label" type="Label" parent="CanvasLayer/ColorRect"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -112.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 24
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(719, 342)
+texture = ExtResource("3_f5sy3")
+
+[node name="Node2D" type="Node2D" parent="."]
+position = Vector2(1114, 581)
+
+[node name="Camera2D" type="Camera2D" parent="Node2D"]
+
+[connection signal="pressed" from="CanvasLayer/ColorRect/Button" to="." method="_on_move_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/ColorRect/Button2" to="." method="_on_rotate_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/ColorRect/Button3" to="." method="_on_scale_rotation_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/ColorRect/Button4" to="." method="_on_seq_button_pressed"]

@@ -131,6 +131,7 @@ func role_turn(role : Node2D):
 	else:
 		print("\n开始电脑 ", role.名称, " 的回合")
 		dice_and_move()
+	role.on_turn()
 	
 # 切换到下一个玩家
 func switch_role():
