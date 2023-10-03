@@ -7,6 +7,8 @@
 [node name="Node" type="Node"]
 script = ExtResource("1_qlkcd")
 
+[node name="Camera2D" type="Camera2D" parent="."]
+
 [node name="TileMap" parent="." instance=ExtResource("1_lmeuq")]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
@@ -61,6 +63,15 @@ offset_bottom = 199.0
 theme_override_font_sizes/font_size = 32
 text = "序列"
 
+[node name="Button5" type="Button" parent="CanvasLayer/ColorRect"]
+layout_mode = 0
+offset_left = 139.0
+offset_top = 9.0
+offset_right = 239.0
+offset_bottom = 69.0
+theme_override_font_sizes/font_size = 32
+text = "测试"
+
 [node name="Label" type="Label" parent="CanvasLayer/ColorRect"]
 layout_mode = 1
 anchors_preset = 12
@@ -77,6 +88,7 @@ position = Vector2(719, 342)
 texture = ExtResource("3_f5sy3")
 
 [node name="Node2D" type="Node2D" parent="."]
+visible = false
 position = Vector2(1114, 581)
 
 [node name="Camera2D" type="Camera2D" parent="Node2D"]
@@ -85,3 +97,4 @@ position = Vector2(1114, 581)
 [connection signal="pressed" from="CanvasLayer/ColorRect/Button2" to="." method="_on_rotate_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/ColorRect/Button3" to="." method="_on_scale_rotation_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/ColorRect/Button4" to="." method="_on_seq_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/ColorRect/Button5" to="." method="_on_test_pressed"]

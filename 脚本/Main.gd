@@ -2,7 +2,6 @@ class_name Role
 extends Node
 
 
-
 # 图集属性
 # 0 道路, 可以同行
 # 1 障碍, 不可同行
@@ -60,6 +59,9 @@ func _ready():
 	role_turn($TileMap/Role)
 	
 func on_role_move_end():
+	# 切换相机节点
+	#相机节点.position = current.position
+	$Node2D/Camera2D.make_current()
 	switch_role()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -122,16 +124,26 @@ func move_role(role : Node2D, step : int):
 func show_player_panel():
 	$CanvasLayer/ColorRect/Button.show()
 	
+	
+func camera_move_finished():
+	# 切换相机父节点
+	current.set_camera()
+	
+	await get_tree().create_timer(0.5).timeout
+	
+	if current.是否玩家:
+		print("\n开始玩家 ", current.名称, " 的回合")
+		show_player_panel()
+	else:
+		print("\n开始电脑 ", current.名称, " 的回合")
+		dice_and_move()
+	
 # 开始指定玩家的回合
 func role_turn(role : Node2D):
 	current = role
-	if role.是否玩家:
-		print("\n开始玩家 ", role.名称, " 的回合")
-		show_player_panel()
-	else:
-		print("\n开始电脑 ", role.名称, " 的回合")
-		dice_and_move()
-	role.on_turn()
+	# 摄像机移动到角色中心
+	var anim = AnimationManager.move_to($Node2D, role.global_position, 1)
+	anim.finished.connect(camera_move_finished)
 	
 # 切换到下一个玩家
 func switch_role():

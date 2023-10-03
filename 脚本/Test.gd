@@ -10,6 +10,9 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	#$Camera2D.offset.x += 1
+	#print($Camera2D.position)
+	$Camera2D.position.x += 1
 #	if $Node2D.position != target:
 #		#$Node2D.position = $Node2D.position.move_toward(target, delta)	# 修改位置
 #		$Node2D.position += (target - $Node2D.position).normalized()
@@ -56,3 +59,7 @@ func _on_seq_button_pressed():
 	GCAM.MoveBy.new($Sprite2D, Vector2(0, -400), 0.5)]
 	AnimationManager.sequence(anims, false, 3)
 
+
+
+func _on_test_pressed():
+	$Camera.test()

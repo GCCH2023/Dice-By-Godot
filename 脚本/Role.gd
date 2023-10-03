@@ -86,6 +86,9 @@ func move_finished():
 		return
 	move()
 	
+func set_camera():
+	$Camera2D.make_current()
+	
 func _ready():
 #	add_move(RIGHT, 5)
 #	add_move(DOWN, 5)

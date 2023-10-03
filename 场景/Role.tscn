@@ -10,3 +10,5 @@ sprite_frames = ExtResource("1_wyavt")
 animation = &"向左"
 centered = false
 offset = Vector2(-16, -32)
+
+[node name="Camera2D" type="Camera2D" parent="."]
