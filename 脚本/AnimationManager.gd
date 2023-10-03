@@ -355,6 +355,7 @@ func _process(delta):
 # 接着, 主相机平移到下一个角色的位置, 切换到下一个角色的相机
 var main_camera : Camera2D
 var main_camera_node : Node2D
+signal camera_switched
 
 func set_main_camera(main:Camera2D):
 	main_camera = main
@@ -371,7 +372,7 @@ func switch_camera(cur_camera:Camera2D, next_camera:Camera2D, duration:float=1):
 	# 平移动画
 	var target = next_camera.get_parent().global_position
 	target = main_camera_node.to_local(target)
-	move_to(main_camera, target, duration)
+	move_to(main_camera, target, duration).finished.connect(func(): emit_signal("camera_switched"))
 
 
 

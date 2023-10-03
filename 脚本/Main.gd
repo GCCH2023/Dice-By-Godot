@@ -56,6 +56,8 @@ func _ready():
 	print("tile_set[1][2] = ", tile_set[tile_set_pos.y][tile_set_pos.x])
 	print("map[1][2] = ",  map[v.y][v.x])
 	print(get_move_one(Vector2i(9, 2), Vector2i.RIGHT))
+	AnimationManager.set_main_camera($Node2D/Camera2D);
+	AnimationManager.camera_switched.connect(camera_move_finished)
 	role_turn($TileMap/Role)
 	
 func on_role_move_end():
@@ -140,10 +142,12 @@ func camera_move_finished():
 	
 # 开始指定玩家的回合
 func role_turn(role : Node2D):
+	var cur_camera = current.get_camera() if current != null else null
+	AnimationManager.switch_camera(cur_camera, role.get_camera())
 	current = role
 	# 摄像机移动到角色中心
-	var anim = AnimationManager.move_to($Node2D, role.global_position, 1)
-	anim.finished.connect(camera_move_finished)
+	#var anim = AnimationManager.move_to($Node2D, role.global_position, 1)
+	#anim.finished.connect(camera_move_finished)
 	
 # 切换到下一个玩家
 func switch_role():
