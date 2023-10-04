@@ -36,3 +36,4 @@ centered = false
 offset = Vector2(-16, -32)
 
 [node name="Camera2D" type="Camera2D" parent="."]
+editor_draw_screen = false
