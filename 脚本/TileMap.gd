@@ -35,4 +35,7 @@ func get_role_position(role : Node2D):
 	
 func get_role_direction(role : Node2D):
 	return role.direction
+	
+func get_player() -> Node2D:
+	return $Role
 

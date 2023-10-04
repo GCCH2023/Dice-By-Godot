@@ -15,10 +15,12 @@ _data = {
 script = ExtResource("1_sb2qo")
 
 [node name="TileMap" parent="." instance=ExtResource("1_ui0cf")]
+scale = Vector2(2, 2)
 
 [node name="Node2D" type="Node2D" parent="."]
 
 [node name="Camera2D" type="Camera2D" parent="Node2D"]
+editor_draw_screen = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("")
@@ -29,31 +31,39 @@ libraries = {
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
-offset_left = 440.0
-offset_top = 260.0
-offset_right = 840.0
-offset_bottom = 460.0
-color = Color(0.239216, 0.239216, 0.239216, 0.317647)
-
-[node name="Button" type="Button" parent="CanvasLayer/ColorRect"]
-layout_mode = 0
-offset_left = 20.0
-offset_top = 20.0
-offset_right = 120.0
-offset_bottom = 80.0
-theme_override_font_sizes/font_size = 32
-text = "前进"
-
-[node name="Label" type="Label" parent="CanvasLayer/ColorRect"]
-layout_mode = 1
+custom_minimum_size = Vector2(0, 100)
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -112.0
 grow_horizontal = 2
 grow_vertical = 0
+color = Color(0.239216, 0.239216, 0.239216, 0.317647)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/ColorRect"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 100.0
+offset_top = -26.5
+offset_right = 100.0
+offset_bottom = 26.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="Button" type="Button" parent="CanvasLayer/ColorRect/HBoxContainer"]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 32
+text = "前进"
+
+[node name="Label" type="Label" parent="CanvasLayer/ColorRect/HBoxContainer"]
+layout_mode = 2
 theme_override_font_sizes/font_size = 24
 
 [connection signal="move_end" from="TileMap" to="." method="on_role_move_end"]
-[connection signal="pressed" from="CanvasLayer/ColorRect/Button" to="." method="on_forward_pressed"]
+[connection signal="pressed" from="CanvasLayer/ColorRect/HBoxContainer/Button" to="." method="on_forward_pressed"]

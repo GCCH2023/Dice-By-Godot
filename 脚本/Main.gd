@@ -58,7 +58,7 @@ func _ready():
 	print(get_move_one(Vector2i(9, 2), Vector2i.RIGHT))
 	AnimationManager.set_main_camera($Node2D/Camera2D);
 	AnimationManager.camera_switched.connect(camera_move_finished)
-	role_turn($TileMap/Role)
+	role_turn($TileMap.get_player())
 	
 func on_role_move_end():
 	# 切换相机节点
@@ -124,7 +124,7 @@ func move_role(role : Node2D, step : int):
 		role.add_move_by_vec(last_vec, count)
 	
 func show_player_panel():
-	$CanvasLayer/ColorRect/Button.show()
+	$CanvasLayer/ColorRect/HBoxContainer/Button.disabled = false
 	
 	
 func camera_move_finished():
@@ -156,12 +156,13 @@ func switch_role():
 func dice_and_move():
 	var n = randi_range(1, 6)
 	print("骰子掷出了", n, "点")
-	$CanvasLayer/ColorRect/Label.text = "%s 骰子掷出了 %d 点" % [current.名称, n]
+	$CanvasLayer/ColorRect/HBoxContainer/Label.text = "%s 骰子掷出了 %d 点" % [current.名称, n]
 	# 生成移动路线
 	move_role(current, n)
 	
 # 前进
 func on_forward_pressed():
-	$CanvasLayer/ColorRect/Button.hide()
-	dice_and_move()
+	if current == $TileMap.get_player():
+		$CanvasLayer/ColorRect/HBoxContainer/Button.disabled = true
+		dice_and_move()
 	
