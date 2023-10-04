@@ -58,6 +58,8 @@ func _ready():
 	print(get_move_one(Vector2i(9, 2), Vector2i.RIGHT))
 	AnimationManager.set_main_camera($Node2D/Camera2D);
 	AnimationManager.camera_switched.connect(camera_move_finished)
+	var player = $TileMap.get_player()
+	$CanvasLayer/ColorRect/HBoxContainer/Money.text = str(player.get_money())
 	role_turn($TileMap.get_player())
 	
 func on_role_move_end():
@@ -133,6 +135,7 @@ func camera_move_finished():
 	
 	await get_tree().create_timer(0.5).timeout
 	
+	$CanvasLayer/ColorRect/HBoxContainer/Money.text = str(current.get_money())
 	if current.是否玩家:
 		print("\n开始玩家 ", current.名称, " 的回合")
 		show_player_panel()

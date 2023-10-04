@@ -1,9 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://sqd755ldubih"]
+[gd_scene load_steps=7 format=3 uid="uid://sqd755ldubih"]
 
 [ext_resource type="TileSet" uid="uid://dxqnu1c3hpe1f" path="res://资源/TileSet.tres" id="1_huj11"]
 [ext_resource type="Script" path="res://脚本/TileMap.gd" id="2_m5j3o"]
 [ext_resource type="PackedScene" uid="uid://b1gb2gosbwgja" path="res://场景/Role.tscn" id="3_e1xg6"]
 [ext_resource type="Script" path="res://脚本/Role.gd" id="4_cfssw"]
+[ext_resource type="SpriteFrames" uid="uid://q66jb7e8rew8" path="res://资源/Role.tres" id="5_wt5qk"]
+[ext_resource type="SpriteFrames" uid="uid://beurxguwblekv" path="res://资源/Role1.tres" id="6_1qgnm"]
 
 [node name="TileMap" type="TileMap"]
 scale = Vector2(1.5, 1.5)
@@ -24,19 +26,29 @@ script = ExtResource("2_m5j3o")
 position = Vector2(80, 80)
 script = ExtResource("4_cfssw")
 "名称" = "狗多"
+"颜色" = Color(1, 0, 0, 1)
 "是否玩家" = true
+id = 55
+sprite_frames = ExtResource("5_wt5qk")
 
 [node name="Role2" parent="." instance=ExtResource("3_e1xg6")]
 position = Vector2(80, 654)
 script = ExtResource("4_cfssw")
 "名称" = "来福"
+"颜色" = Color(0, 1, 1, 1)
+id = 12
+sprite_frames = ExtResource("6_1qgnm")
 
 [node name="Role3" parent="." instance=ExtResource("3_e1xg6")]
 position = Vector2(1200, 80)
 script = ExtResource("4_cfssw")
 "名称" = "旺财"
+"颜色" = Color(1, 0, 1, 1)
+sprite_frames = ExtResource("5_wt5qk")
 
 [node name="Role4" parent="." instance=ExtResource("3_e1xg6")]
 position = Vector2(1200, 654)
 script = ExtResource("4_cfssw")
 "名称" = "王德发"
+"颜色" = Color(1, 1, 0, 1)
+sprite_frames = ExtResource("5_wt5qk")
