@@ -8,10 +8,11 @@ extends CharacterBody2D
 	get = get_颜色, set = set_颜色
 @export var 是否玩家 : bool = false
 @export var 资金 : int = 10000
-@export var id : int = 0:
-	get = get_id, set = set_id
 @export var sprite_frames : SpriteFrames = null:
 	get = get_sprite_frames, set = set_sprite_frames
+@export var 图块位置:Vector2i
+
+var id:int = 0
 
 func get_名称()->String:
 	return 名称
@@ -31,13 +32,6 @@ func set_颜色(value:Color):
 	颜色 = value
 	$ColorRect.color = value
 
-func set_id(value):
-	print("set id", value)
-	id = value
-
-func get_id():
-	return id
-	
 func get_sprite_frames() -> SpriteFrames:
 	return $Animation.sprite_frames
 	

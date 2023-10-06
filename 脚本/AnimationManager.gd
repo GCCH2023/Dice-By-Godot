@@ -350,7 +350,7 @@ func _process(delta):
 # 角色视角切换问题
 # 每个角色下面需要有一个相机, 场景下面有一个主相机,
 # 角色移动跟随使用角色下面的相机, 角色切换使用主相机
-# 第一次时, 当需要切换到第一个角色A时, 将主相机平移到该角色的位置, 然后切换到该该角色的相机
+# 第一次时, 当需要切换到第一个角色时, 将主相机平移到该角色的位置, 然后切换到该该角色的相机
 # 此后, 每到切换下一个角色时, 先将主相机的位置设为当前角色的位置, 并切换到主相机
 # 接着, 主相机平移到下一个角色的位置, 切换到下一个角色的相机
 var main_camera : Camera2D
@@ -372,7 +372,10 @@ func switch_camera(cur_camera:Camera2D, next_camera:Camera2D, duration:float=1):
 	# 平移动画
 	var target = next_camera.get_parent().global_position
 	target = main_camera_node.to_local(target)
-	move_to(main_camera, target, duration).finished.connect(func(): emit_signal("camera_switched"))
+	var anim = move_to(main_camera, target, duration)
+	anim.finished.connect(func(): emit_signal("camera_switched"))
+	await anim.finished
+	next_camera.make_current()
 
 
 

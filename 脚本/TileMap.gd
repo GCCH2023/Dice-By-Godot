@@ -19,7 +19,7 @@ func _ready():
 		children[i].next = children[(i + 1) % children.size()]
 		children[i].prev = children[(i + children.size() -1) % children.size()]
 		children[i].move_end.connect(on_role_move_end)
-	print($Role.next.名称)
+		children[i].id = i + 1
 
 func on_role_move_end(role : Node2D):
 	print("角色 ", role.名称, " 回合结束")
@@ -39,3 +39,8 @@ func get_role_direction(role : Node2D):
 func get_player() -> Node2D:
 	return $Role
 
+func get_role_by_id(id:int)->Node2D:
+	var children = get_children()
+	if id <= 0 || id > children.size():
+		return null
+	return children[id - 1]

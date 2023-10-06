@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://cu5vg0uxqxf5q"]
+
+[ext_resource type="Script" path="res://Node2D.gd" id="1_depr7"]
+[ext_resource type="Texture2D" uid="uid://rbek5yq1hc04" path="res://图片/icon.svg" id="2_d2m4g"]
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_depr7")
+
+[node name="Node2D" type="Node2D" parent="."]
+
+[node name="主相机" type="Camera2D" parent="Node2D"]
+position = Vector2(1199, 542)
+
+[node name="Role1" type="Sprite2D" parent="."]
+position = Vector2(179, 151)
+texture = ExtResource("2_d2m4g")
+
+[node name="角色相机" type="Camera2D" parent="Role1"]
+
+[node name="Role2" type="Sprite2D" parent="."]
+position = Vector2(868, 505)
+texture = ExtResource("2_d2m4g")
+
+[node name="角色相机" type="Camera2D" parent="Role2"]

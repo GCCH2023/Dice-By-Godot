@@ -28,16 +28,16 @@ script = ExtResource("4_cfssw")
 "名称" = "狗多"
 "颜色" = Color(1, 0, 0, 1)
 "是否玩家" = true
-id = 55
 sprite_frames = ExtResource("5_wt5qk")
+"图块位置" = Vector2i(6, 17)
 
 [node name="Role2" parent="." instance=ExtResource("3_e1xg6")]
 position = Vector2(80, 654)
 script = ExtResource("4_cfssw")
 "名称" = "来福"
 "颜色" = Color(0, 1, 1, 1)
-id = 12
 sprite_frames = ExtResource("6_1qgnm")
+"图块位置" = Vector2i(5, 17)
 
 [node name="Role3" parent="." instance=ExtResource("3_e1xg6")]
 position = Vector2(1200, 80)
@@ -45,6 +45,7 @@ script = ExtResource("4_cfssw")
 "名称" = "旺财"
 "颜色" = Color(1, 1, 0, 1)
 sprite_frames = ExtResource("5_wt5qk")
+"图块位置" = Vector2i(4, 17)
 
 [node name="Role4" parent="." instance=ExtResource("3_e1xg6")]
 position = Vector2(1200, 654)
@@ -52,3 +53,4 @@ script = ExtResource("4_cfssw")
 "名称" = "王德发"
 "颜色" = Color(1, 0, 1, 1)
 sprite_frames = ExtResource("5_wt5qk")
+"图块位置" = Vector2i(3, 17)
