@@ -249,6 +249,28 @@ class ScaleRatio extends  TargetAnimation:
 		if !is_flipping:
 			origin = node.scale
 			end = origin * target
+
+# 倾斜节点一个变化量的动画
+class SkewBy extends DeltaAnimation:
+
+	func _init(node:Node2D, degree:float, duration:float=1, is_flip:bool=false, loop_count:int=1):
+		super._init(node, node.skew, deg_to_rad(degree), duration, is_flip, loop_count)
+
+	func change(time:float):
+		if is_flipping:
+			node.skew -= delta * time
+		else:
+			node.skew += delta * time
+	
+# 倾斜节点到目标值的动画
+class SkewTo extends TargetAnimation:
+
+	func _init(node:Node2D, target:float, duration:float=1, is_flip:bool=false, loop_count:int=1):
+		super._init(node, node.skew, deg_to_rad(target), duration, is_flip, loop_count)
+		
+	func change(time:float):
+		node.skew = lerp(origin, target, time)
+
 		
 # 序列动画, 可以容纳多个动画, 这些动画依次播放
 class SequenceAnimation extends GCAnimation:
@@ -311,6 +333,20 @@ func rotate_to_bug1(node:Node2D, degreee:float, duration:float=1, is_flip:bool=f
 # degreee 是正值则顺时针旋转, 负值则逆时针旋转
 func rotate_by(node:Node2D, degreee:float, duration:float=1, is_flip:bool=false, loop_count:int=1):
 	var anim = RotateBy.new(node, degreee, duration, is_flip, loop_count)
+	add_anim(anim)
+	return anim
+
+# 将节点node从当前角度倾斜到指定角度
+# degreee 是正值则顺时针倾斜, 负值则逆时针倾斜
+func skew_to(node:Node2D, degreee:float, duration:float=1, is_flip:bool=false, loop_count:int=1):
+	var anim = SkewTo.new(node, degreee, duration, is_flip, loop_count)
+	add_anim(anim)
+	return anim
+
+# 增量方式倾斜节点
+# degreee 是正值则顺时针倾斜, 负值则逆时针倾斜
+func skew_by(node:Node2D, degreee:float, duration:float=1, is_flip:bool=false, loop_count:int=1):
+	var anim = SkewBy.new(node, degreee, duration, is_flip, loop_count)
 	add_anim(anim)
 	return anim
 	
