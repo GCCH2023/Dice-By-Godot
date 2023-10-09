@@ -14,7 +14,7 @@ class GCAnimation:
 	# 藐视动画的属性, 在动画过程中不会修改
 	var node : Node2D		# 目标节点
 	var duration : float	# 持续时间
-	var is_filp : bool		# 是否翻转动画
+	var is_flip : bool		# 是否翻转动画
 	var loop_count : int 		# 循环次数, 正反算一次
 	var is_flipping : bool	# 是否正在翻转
 	var is_finished : bool	# 动画是否播放完毕, 播放完毕将被删除
@@ -32,7 +32,7 @@ class GCAnimation:
 
 		self.node = node
 		self.duration = duration
-		self.is_filp = is_flip
+		self.is_flip = is_flip
 		self.loop_count = loop_count
 		self.is_flipping = false
 		self.is_finished = false
@@ -76,7 +76,7 @@ class GCAnimation:
 		
 		# 动画完成后重置计时器
 		if timer >= duration:
-			if is_filp:		# 需要翻转, 当前是正动画的话
+			if is_flip:		# 需要翻转, 当前是正动画的话
 				is_flipping = true		# 设置翻转标志, 接下来播放翻转动画
 				timer = duration
 			elif iterator + 1 < loop_count:	# 不需要翻转, 那么判断是否循环
@@ -99,13 +99,22 @@ class GCAnimation:
 # 目标值动画
 # change 中 time 是从动画开始经过的时间与duration的比值, 属于[0, 1]
 class TargetAnimation extends GCAnimation:
-	
+	var origin		# 原来的属性值
+	var target		# 目标属性值
+
+	func _init(node:Node2D, origin, target, duration:float=1, is_flip:bool=false, loop_count:int=1):
+		super(node, duration, is_flip, loop_count)
+		
+		self.origin = origin
+		self.target = target
+
 	# 处理动画细节
 	func process(delta:float):
 		# 计算插值因子（0到1之间）
 		var t = timer / duration
 		t = clamp(t, 0, 1) # 限制在0到1之间
-	
+		if is_flipping:
+			print(t)
 		change(t)
 	
 # 动画链表
@@ -138,17 +147,13 @@ func remove_anim(anim:GCAnimation):
 
 # 移动节点的动画
 class MoveTo extends TargetAnimation:
-	var position : Vector2	# 开始位置
-	var target : Vector2	# 结束位置
 
 	func _init(node:Node2D, target:Vector2, duration:float=1, is_flip:bool=false, loop_count:int=1):
-		super._init(node, duration, is_flip, loop_count)
-		self.position = node.position
-		self.target = target
+		super._init(node, node.position, target, duration, is_flip, loop_count)
 		
 	func change(time:float):
 		# 使用插值因子来计算角色当前位置, 更新角色位置
-		node.position = lerp(position, target, time)
+		node.position = lerp(origin, target, time)
 		
 		
 # 移动节点的动画
@@ -171,23 +176,19 @@ class MoveBy extends GCAnimation:
 	
 # 旋转节点到目标角度的动画
 class RotateTo extends TargetAnimation:
-	var start : float	# 开始角度 (弧度)
-	var end : float		# 结束角度 (弧度)
-
 	# !!! target 是角度
 	func _init(node:Node2D, target:float, duration:float=1, is_flip:bool=false, loop_count:int=1):
-		super._init(node, duration, is_flip, loop_count)
-		self.start = node.rotation
-		self.end = deg_to_rad(target)
+		super._init(node, node.rotation, deg_to_rad(target), duration, is_flip, loop_count)
 		
 	func change(time:float):
-		node.rotation = lerp(start, end, time)
+		print(origin, target, time)
+		node.rotation = lerp(origin, target, time)
 		
 # 旋转节点的一个bug, 还挺有趣的, 保留下来
 class RotateToBug1 extends RotateTo:
 	
 	func change(time:float):
-		node.rotate(lerp(start, end, time))
+		node.rotate(lerp(origin, target, time))
 		
 # 旋转节点一个变化量的动画
 class RotateBy extends GCAnimation:
@@ -207,18 +208,12 @@ class RotateBy extends GCAnimation:
 	
 # 缩放节点到目标值的动画
 class ScaleTo extends  TargetAnimation:
-	var start : Vector2
-	var end : Vector2
-	
+
 	func _init(node:Node2D, target:Vector2, duration:float=1, is_flip:bool=false, loop_count:int=1):
-		super._init(node, duration, is_flip, loop_count)
-		self.start = node.scale
-		self.end = target
-		print(end)
+		super._init(node, node.scale, target, duration, is_flip, loop_count)
 		
 	func change(time:float):
-		print(start, end, time)
-		node.scale = lerp(start, end, time)
+		node.scale = lerp(origin, target, time)
 	
 # 按变化量缩放节点
 # 比如初始缩放为(1.5, 1.5), delta为(-0.5, -0.5), 则第1次播放动画, 缩放变为(1.0, 1.0)
@@ -243,24 +238,21 @@ class ScaleBy extends  GCAnimation:
 # 按比例缩放节点
 # 比如初始缩放为(1.5, 1.5), delta为(0.5, 0.5), 则第1次播放动画, 缩放变为(0.75, 0.75)
 # 再播放一次动画缩放变为(0.375, 0375)
+# !!!target 被当作 变化量来使用
 class ScaleRatio extends  TargetAnimation:
-	var start : Vector2
-	var delta : Vector2
 	var end : Vector2
 	
 	func _init(node:Node2D, delta:Vector2, duration:float=1, is_flip:bool=false, loop_count:int=1):
-		super._init(node, duration, is_flip, loop_count)
-		self.start = node.scale
-		self.delta = delta
-		self.end = self.start * delta
+		super._init(node, node.scale, delta, duration, is_flip, loop_count)
+		self.end = self.origin * delta
 		
 	func change(time:float):
-		node.scale = lerp(start, end, time)
+		node.scale = lerp(origin, end, time)
 			
 	func before_next():
 		if !is_flipping:
-			start = node.scale
-			end = node.scale * delta
+			origin = node.scale
+			end = origin * target
 		
 # 序列动画, 可以容纳多个动画, 这些动画依次播放
 class SequenceAnimation extends GCAnimation:
