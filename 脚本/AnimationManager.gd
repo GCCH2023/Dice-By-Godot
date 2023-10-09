@@ -7,27 +7,38 @@ var test = 100
 
 # 定义动画的基本属性
 class GCAnimation:
+	# 形成链表的属性
 	var next : GCAnimation	# 下一个动画
 	var prev : GCAnimation 	# 上一个动画
+	
+	# 藐视动画的属性, 在动画过程中不会修改
 	var node : Node2D		# 目标节点
 	var duration : float	# 持续时间
-	var timer : float 		# 动画计时
 	var is_filp : bool		# 是否翻转动画
 	var loop_count : int 		# 循环次数, 正反算一次
 	var is_flipping : bool	# 是否正在翻转
 	var is_finished : bool	# 动画是否播放完毕, 播放完毕将被删除
+	
+	# 信号
 	signal finished		# 动画结束时调用
 	
-	func _init(node:Node2D, duration:float, is_flip:bool=false, loop_count:int=1):
+	# 动画变量, 在动画过程中会修改
+	var timer : float 		# 动画计时
+	var iterator : int		# 当前动画播放次数
+	
+	func _init(node:Node2D, duration:float=1, is_flip:bool=false, loop_count:int=1):
 		self.next = null
 		self.prev = null
+
 		self.node = node
 		self.duration = duration
 		self.is_filp = is_flip
 		self.loop_count = loop_count
-		self.timer = 0
 		self.is_flipping = false
 		self.is_finished = false
+
+		self.timer = 0
+		self.iterator = 0
 		
 	# 重置动画计时器
 	func reset():
@@ -51,14 +62,16 @@ class GCAnimation:
 	func before_next():
 		pass
 		
-	# delta 是 _process 的参数
-	func update(delta:float):
-		# 更新动画计时器
+	# 更新动画计时器
+	func update_timer(delta:float):
 		if !is_flipping:
 			timer += delta
 		else:
 			timer -= delta
-	
+		
+	# delta 是 _process 的参数
+	func update(delta:float):
+		update_timer(delta)
 		process(delta)
 		
 		# 动画完成后重置计时器
@@ -66,19 +79,19 @@ class GCAnimation:
 			if is_filp:		# 需要翻转, 当前是正动画的话
 				is_flipping = true		# 设置翻转标志, 接下来播放翻转动画
 				timer = duration
-			elif loop_count > 1:	# 不需要翻转, 那么判断是否循环
-				loop_count -= 1
+			elif iterator + 1 < loop_count:	# 不需要翻转, 那么判断是否循环
+				iterator += 1
 				reset()
 			else:	# 结束动画
 				on_finished()
 				return
 			before_next()
 		elif timer <= 0:		# 反动画完毕, 不需要循环播放就结束动画
-			if loop_count <= 1:
+			if iterator + 1 >= loop_count:
 				on_finished()
 				return
 			else:		# 循环下一次
-				loop_count -= 1
+				iterator += 1
 				is_flipping = false
 				reset()
 			before_next()
@@ -128,7 +141,7 @@ class MoveTo extends TargetAnimation:
 	var position : Vector2	# 开始位置
 	var target : Vector2	# 结束位置
 
-	func _init(node:Node2D, target:Vector2, duration:float, is_flip:bool=false, loop_count:int=1):
+	func _init(node:Node2D, target:Vector2, duration:float=1, is_flip:bool=false, loop_count:int=1):
 		super._init(node, duration, is_flip, loop_count)
 		self.position = node.position
 		self.target = target
@@ -143,7 +156,7 @@ class MoveBy extends GCAnimation:
 	var position : Vector2	# 开始位置
 	var vector : Vector2	# 位置变化量
 
-	func _init(node:Node2D, vector:Vector2, duration:float, is_flip:bool=false, loop_count:int=1):
+	func _init(node:Node2D, vector:Vector2, duration:float=1, is_flip:bool=false, loop_count:int=1):
 		super._init(node, duration, is_flip, loop_count)
 		self.position = node.position
 		self.vector = vector
@@ -151,8 +164,10 @@ class MoveBy extends GCAnimation:
 	func change(time:float):
 		# 使用插值因子来计算角色当前位置, 更新角色位置
 		#node.position = lerp(position, position + vector, time)
-		node.position += vector * time
-	
+		if is_flipping:
+			node.position = node.position - vector * time
+		else:
+			node.position = node.position + vector * time
 	
 # 旋转节点到目标角度的动画
 class RotateTo extends TargetAnimation:
@@ -160,7 +175,7 @@ class RotateTo extends TargetAnimation:
 	var end : float		# 结束角度 (弧度)
 
 	# !!! target 是角度
-	func _init(node:Node2D, target:float, duration:float, is_flip:bool=false, loop_count:int=1):
+	func _init(node:Node2D, target:float, duration:float=1, is_flip:bool=false, loop_count:int=1):
 		super._init(node, duration, is_flip, loop_count)
 		self.start = node.rotation
 		self.end = deg_to_rad(target)
@@ -179,26 +194,30 @@ class RotateBy extends GCAnimation:
 	var start : float	# 开始位置
 	var delta : float	# 位置变化量
 
-	func _init(node:Node2D, degree:float, duration:float, is_flip:bool=false, loop_count:int=1):
+	func _init(node:Node2D, degree:float, duration:float=1, is_flip:bool=false, loop_count:int=1):
 		super._init(node, duration, is_flip, loop_count)
 		self.start = node.rotation
 		self.delta = deg_to_rad(degree)
 
 	func change(time:float):
-		#node.rotate(lerp(start, start + delta, time))
-		node.rotation += delta * time
+		if is_flipping:
+			node.rotation -= delta * time
+		else:
+			node.rotation += delta * time
 	
 # 缩放节点到目标值的动画
 class ScaleTo extends  TargetAnimation:
 	var start : Vector2
 	var end : Vector2
 	
-	func _init(node:Node2D, target:Vector2, duration:float, is_flip:bool=false, loop_count:int=1):
+	func _init(node:Node2D, target:Vector2, duration:float=1, is_flip:bool=false, loop_count:int=1):
 		super._init(node, duration, is_flip, loop_count)
 		self.start = node.scale
 		self.end = target
+		print(end)
 		
 	func change(time:float):
+		print(start, end, time)
 		node.scale = lerp(start, end, time)
 	
 # 按变化量缩放节点
@@ -208,13 +227,16 @@ class ScaleBy extends  GCAnimation:
 	var start : Vector2
 	var delta : Vector2
 	
-	func _init(node:Node2D, delta:Vector2, duration:float, is_flip:bool=false, loop_count:int=1):
+	func _init(node:Node2D, delta:Vector2, duration:float=1, is_flip:bool=false, loop_count:int=1):
 		super._init(node, duration, is_flip, loop_count)
 		self.start = node.scale
 		self.delta = delta
 		
 	func change(time:float):
-		node.scale += delta * time
+		if is_flipping:
+			node.scale -= delta * time
+		else:
+			node.scale += delta * time
 		if node.scale.x <= 0 || node.scale.y <= 0:
 			on_finished()
 			
@@ -226,7 +248,7 @@ class ScaleRatio extends  TargetAnimation:
 	var delta : Vector2
 	var end : Vector2
 	
-	func _init(node:Node2D, delta:Vector2, duration:float, is_flip:bool=false, loop_count:int=1):
+	func _init(node:Node2D, delta:Vector2, duration:float=1, is_flip:bool=false, loop_count:int=1):
 		super._init(node, duration, is_flip, loop_count)
 		self.start = node.scale
 		self.delta = delta
@@ -273,38 +295,38 @@ class SequenceAnimation extends GCAnimation:
 				next_animation()
 	
 # 将节点node平移用duration指定的时间到指定位置target
-func move_to(node:Node2D, target:Vector2, duration:float, is_flip:bool=false, loop_count:int=1):
+func move_to(node:Node2D, target:Vector2, duration:float=1, is_flip:bool=false, loop_count:int=1):
 	var anim = MoveTo.new(node, target, duration, is_flip, loop_count)
 	add_anim(anim)
 	return anim
 
 # 增量方式平移节点
-func move_by(node:Node2D, vector:Vector2, duration:float, is_flip:bool=false, loop_count:int=1):
+func move_by(node:Node2D, vector:Vector2, duration:float=1, is_flip:bool=false, loop_count:int=1):
 	var anim = MoveBy.new(node, vector, duration, is_flip, loop_count)
 	add_anim(anim)
 	return anim
 	
 # 将节点node从当前角度旋转到指定角度
 # degreee 是正值则顺时针旋转, 负值则逆时针旋转
-func rotate_to(node:Node2D, degreee:float, duration:float, is_flip:bool=false, loop_count:int=1):
+func rotate_to(node:Node2D, degreee:float, duration:float=1, is_flip:bool=false, loop_count:int=1):
 	var anim = RotateTo.new(node, degreee, duration, is_flip, loop_count)
 	add_anim(anim)
 	return anim
 	
 # 将节点node从当前角度旋转到指定角度
-func rotate_to_bug1(node:Node2D, degreee:float, duration:float, is_flip:bool=false, loop_count:int=1):
+func rotate_to_bug1(node:Node2D, degreee:float, duration:float=1, is_flip:bool=false, loop_count:int=1):
 	var anim = RotateToBug1.new(node, degreee, duration, is_flip, loop_count)
 	add_anim(anim)
 	return anim
 
 # 增量方式旋转节点
 # degreee 是正值则顺时针旋转, 负值则逆时针旋转
-func rotate_by(node:Node2D, degreee:float, duration:float, is_flip:bool=false, loop_count:int=1):
+func rotate_by(node:Node2D, degreee:float, duration:float=1, is_flip:bool=false, loop_count:int=1):
 	var anim = RotateBy.new(node, degreee, duration, is_flip, loop_count)
 	add_anim(anim)
 	return anim
 	
-func scale_to(node:Node2D, target:Vector2, duration:float, is_flip:bool=false, loop_count:int=1):
+func scale_to(node:Node2D, target:Vector2, duration:float=1, is_flip:bool=false, loop_count:int=1):
 	var anim = ScaleTo.new(node, target, duration, is_flip, loop_count)
 	add_anim(anim)
 	return anim
@@ -312,7 +334,7 @@ func scale_to(node:Node2D, target:Vector2, duration:float, is_flip:bool=false, l
 # 按比例缩放节点
 # 比如delta为(0.5, 0.5), 则第1次播放动画, 节点变为原来的一半, 第
 # 2次播放节点变为一半的一半, 即1/4
-func scale_by(node:Node2D, vector:Vector2, duration:float, is_flip:bool=false, loop_count:int=1):
+func scale_by(node:Node2D, vector:Vector2, duration:float=1, is_flip:bool=false, loop_count:int=1):
 	var anim = ScaleBy.new(node, vector, duration, is_flip, loop_count)
 	add_anim(anim)
 	return anim
@@ -320,7 +342,7 @@ func scale_by(node:Node2D, vector:Vector2, duration:float, is_flip:bool=false, l
 # 按比例缩放节点
 # 比如初始缩放为(1.5, 1.5), delta为(0.5, 0.5), 则第1次播放动画, 缩放变为(0.75, 0.75)
 # 再播放一次动画缩放变为(0.375, 0375), 当节点的缩放值有一个分量小于等于0则, 动画结束
-func scale_ratio(node:Node2D, ratio:Vector2, duration:float, is_flip:bool=false, loop_count:int=1):
+func scale_ratio(node:Node2D, ratio:Vector2, duration:float=1, is_flip:bool=false, loop_count:int=1):
 	var anim = ScaleRatio.new(node, ratio, duration, is_flip, loop_count)
 	add_anim(anim)
 	return anim

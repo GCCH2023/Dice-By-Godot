@@ -90,6 +90,14 @@ func _ready():
 	$CanvasLayer/ColorRect/HBoxContainer/Gold.text = str(player.get_money())
 	role_turn($TileMap.get_player())
 	
+# 更改当前角色的资金, 返回是否成功
+func change_current_role_gold(gold:int)->bool:
+	if current.资金 + gold < 0:
+		return false
+	current.资金 += gold
+	$CanvasLayer/ColorRect/HBoxContainer/Gold.text = str(current.资金)
+	return true
+
 # 获取格子对应的建筑
 func get_building(point:Vector2i)->Cell:
 	return map[point.y][point.x]
@@ -103,8 +111,6 @@ func change_building_owner(building:Cell, role:Node2D):
 
 # 购买建筑
 func buy_building(building:Cell):
-	current.资金 -= building.gold
-	$CanvasLayer/ColorRect/HBoxContainer/Gold.text = str(current.资金)
 	$CanvasLayer/ColorRect/HBoxContainer/Label.text = "%s 花费了 %d 购买了建筑" % [current.名称, building.gold]
 	# 修改建筑所属
 	change_building_owner(building, current)
@@ -112,7 +118,7 @@ func buy_building(building:Cell):
 	
 # 尝试购买建筑
 func try_buy_building(building:Cell):
-	if current.资金 >= building.gold:
+	if change_current_role_gold(-building.gold):
 		buy_building(building)
 
 # 角色到达空地
@@ -123,6 +129,11 @@ func on_arrive_blank(building:Cell):
 # 角色到达角色的地盘
 func on_arrive_role_building(role:Node2D, building:Cell):
 	print("到达", role.名称, "的地盘")
+	# 扣除费用
+	if change_current_role_gold(-building.gold):
+		$CanvasLayer/ColorRect/HBoxContainer/Label.text = "%s 交取了 %d 的过路费" % [current.名称, building.gold]
+	else:
+		print("角色没钱了")
 
 func on_role_move_end():
 	# 判断角色位置周围是否有建筑

@@ -12,7 +12,6 @@ func _ready():
 func _process(delta):
 	#$Camera2D.offset.x += 1
 	#print($Camera2D.position)
-	$Camera2D.position.x += 1
 #	if $Node2D.position != target:
 #		#$Node2D.position = $Node2D.position.move_toward(target, delta)	# 修改位置
 #		$Node2D.position += (target - $Node2D.position).normalized()
