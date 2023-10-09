@@ -40,10 +40,9 @@ custom_minimum_size = Vector2(0, 200)
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 4.0
-offset_top = -484.0
-offset_right = 304.0
-offset_bottom = -284.0
+offset_top = -510.0
+offset_right = 300.0
+offset_bottom = -260.0
 grow_vertical = 0
 color = Color(0.196078, 0.196078, 0.196078, 0.239216)
 
@@ -99,6 +98,23 @@ offset_bottom = 70.0
 theme_override_font_sizes/font_size = 48
 text = "位置:"
 
+[node name="SkewLabel" type="Label" parent="CanvasLayer/ColorRect2"]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 166.0
+offset_right = 208.0
+offset_bottom = 236.0
+theme_override_font_sizes/font_size = 48
+text = "倾斜:"
+
+[node name="Label" type="Label" parent="CanvasLayer/ColorRect2/SkewLabel"]
+layout_mode = 0
+offset_left = 113.0
+offset_right = 318.0
+offset_bottom = 70.0
+theme_override_font_sizes/font_size = 48
+text = "位置:"
+
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
 custom_minimum_size = Vector2(0, 200)
 anchors_preset = 12
@@ -113,13 +129,23 @@ color = Color(0.196078, 0.196078, 0.196078, 0.239216)
 
 [node name="FlipButton" type="CheckButton" parent="CanvasLayer/ColorRect"]
 layout_mode = 0
-offset_left = 26.0
-offset_top = 1.0
-offset_right = 170.0
-offset_bottom = 76.0
-scale = Vector2(1, 1.304)
+offset_left = 47.0
+offset_top = 14.0
+offset_right = 191.0
+offset_bottom = 89.0
+scale = Vector2(0.767, 1)
 theme_override_font_sizes/font_size = 48
 text = "翻转"
+
+[node name="ResetButton" type="Button" parent="CanvasLayer/ColorRect"]
+layout_mode = 0
+offset_left = 1202.0
+offset_top = 23.0
+offset_right = 1354.0
+offset_bottom = 98.0
+theme_override_font_sizes/font_size = 48
+text = "重置
+"
 
 [node name="DurationLabel" type="Label" parent="CanvasLayer/ColorRect"]
 layout_mode = 0
@@ -228,6 +254,27 @@ theme_override_font_sizes/font_size = 48
 text = "比例缩放
 "
 
+[node name="Skew" type="Node2D" parent="CanvasLayer/ColorRect"]
+position = Vector2(891, 111)
+
+[node name="Button" type="Button" parent="CanvasLayer/ColorRect/Skew"]
+offset_left = 2.0
+offset_top = -2.0
+offset_right = 229.0
+offset_bottom = 73.0
+theme_override_font_sizes/font_size = 48
+text = "倾斜到90°
+"
+
+[node name="Button2" type="Button" parent="CanvasLayer/ColorRect/Skew"]
+offset_left = 1.0
+offset_top = 83.0
+offset_right = 153.0
+offset_bottom = 158.0
+theme_override_font_sizes/font_size = 48
+text = "倾斜-15°
+"
+
 [node name="Sequence" type="Node2D" parent="CanvasLayer/ColorRect"]
 position = Vector2(658, 113)
 
@@ -239,6 +286,7 @@ theme_override_font_sizes/font_size = 48
 text = "动画序列
 "
 
+[connection signal="pressed" from="CanvasLayer/ColorRect/ResetButton" to="." method="_on_reset_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/ColorRect/Move/Button" to="." method="_on_move_to_pressed"]
 [connection signal="pressed" from="CanvasLayer/ColorRect/Move/Button2" to="." method="_on_move_by_pressed"]
 [connection signal="pressed" from="CanvasLayer/ColorRect/Rotate/Button" to="." method="_on_rotate_to_pressed"]
@@ -246,4 +294,6 @@ text = "动画序列
 [connection signal="pressed" from="CanvasLayer/ColorRect/Sclae/Button" to="." method="_on_scale_to_pressed"]
 [connection signal="pressed" from="CanvasLayer/ColorRect/Sclae/Button2" to="." method="_on_scale_by_pressed"]
 [connection signal="pressed" from="CanvasLayer/ColorRect/Sclae/Button3" to="." method="_on_scale_ratio_pressed"]
+[connection signal="pressed" from="CanvasLayer/ColorRect/Skew/Button" to="." method="_on_skew_to_pressed"]
+[connection signal="pressed" from="CanvasLayer/ColorRect/Skew/Button2" to="." method="_on_skey_by_pressed"]
 [connection signal="pressed" from="CanvasLayer/ColorRect/Sequence/Button3" to="." method="_on_sequence_pressed"]
