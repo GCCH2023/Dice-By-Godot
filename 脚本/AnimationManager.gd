@@ -116,7 +116,18 @@ class TargetAnimation extends GCAnimation:
 		if is_flipping:
 			print(t)
 		change(t)
-	
+
+# 变化量动画
+class DeltaAnimation extends GCAnimation:
+	var origin		# 原来的属性值
+	var delta		# 变化量
+
+	func _init(node:Node2D, origin, delta, duration:float=1, is_flip:bool=false, loop_count:int=1):
+		super(node, duration, is_flip, loop_count)
+		
+		self.origin = origin
+		self.delta = delta
+
 # 动画链表
 var head : GCAnimation = null
 var tail : GCAnimation = null
@@ -157,22 +168,16 @@ class MoveTo extends TargetAnimation:
 		
 		
 # 移动节点的动画
-class MoveBy extends GCAnimation:
-	var position : Vector2	# 开始位置
-	var vector : Vector2	# 位置变化量
+class MoveBy extends DeltaAnimation:
 
-	func _init(node:Node2D, vector:Vector2, duration:float=1, is_flip:bool=false, loop_count:int=1):
-		super._init(node, duration, is_flip, loop_count)
-		self.position = node.position
-		self.vector = vector
+	func _init(node:Node2D, delta:Vector2, duration:float=1, is_flip:bool=false, loop_count:int=1):
+		super._init(node, node.position, delta, duration, is_flip, loop_count)
 
 	func change(time:float):
-		# 使用插值因子来计算角色当前位置, 更新角色位置
-		#node.position = lerp(position, position + vector, time)
 		if is_flipping:
-			node.position = node.position - vector * time
+			node.position = node.position - delta * time
 		else:
-			node.position = node.position + vector * time
+			node.position = node.position + delta * time
 	
 # 旋转节点到目标角度的动画
 class RotateTo extends TargetAnimation:
@@ -191,14 +196,10 @@ class RotateToBug1 extends RotateTo:
 		node.rotate(lerp(origin, target, time))
 		
 # 旋转节点一个变化量的动画
-class RotateBy extends GCAnimation:
-	var start : float	# 开始位置
-	var delta : float	# 位置变化量
+class RotateBy extends DeltaAnimation:
 
 	func _init(node:Node2D, degree:float, duration:float=1, is_flip:bool=false, loop_count:int=1):
-		super._init(node, duration, is_flip, loop_count)
-		self.start = node.rotation
-		self.delta = deg_to_rad(degree)
+		super._init(node, node.rotation, deg_to_rad(degree), duration, is_flip, loop_count)
 
 	func change(time:float):
 		if is_flipping:
@@ -218,14 +219,9 @@ class ScaleTo extends  TargetAnimation:
 # 按变化量缩放节点
 # 比如初始缩放为(1.5, 1.5), delta为(-0.5, -0.5), 则第1次播放动画, 缩放变为(1.0, 1.0)
 # 再播放一次动画缩放变为(0, 0), 当节点的缩放值有一个分量小于等于0则, 动画结束
-class ScaleBy extends  GCAnimation:
-	var start : Vector2
-	var delta : Vector2
-	
+class ScaleBy extends  DeltaAnimation:
 	func _init(node:Node2D, delta:Vector2, duration:float=1, is_flip:bool=false, loop_count:int=1):
-		super._init(node, duration, is_flip, loop_count)
-		self.start = node.scale
-		self.delta = delta
+		super._init(node, node.scale, delta, duration, is_flip, loop_count)
 		
 	func change(time:float):
 		if is_flipping:
