@@ -1,11 +1,11 @@
 [gd_scene load_steps=4 format=3 uid="uid://cxmgave6nlnqu"]
 
 [ext_resource type="TileSet" uid="uid://dxqnu1c3hpe1f" path="res://资源/TileSet.tres" id="1_5m77n"]
-[ext_resource type="Script" path="res://场景/AnimationScene.gd" id="1_yipym"]
+[ext_resource type="Script" path="res://脚本/AnimationScene.gd" id="1_7cpmr"]
 [ext_resource type="Texture2D" uid="uid://rbek5yq1hc04" path="res://图片/icon.svg" id="2_1cbdw"]
 
 [node name="AnimationScene" type="Node2D"]
-script = ExtResource("1_yipym")
+script = ExtResource("1_7cpmr")
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = ExtResource("1_5m77n")
@@ -30,7 +30,7 @@ offset_bottom = 20.0
 color = Color(1, 0, 0, 1)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(200, 200)
+position = Vector2(1118, 410)
 texture = ExtResource("2_1cbdw")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
@@ -149,12 +149,22 @@ text = "重置
 
 [node name="Test" type="Button" parent="CanvasLayer/ColorRect"]
 layout_mode = 0
-offset_left = 1414.0
-offset_top = 23.0
-offset_right = 1566.0
-offset_bottom = 98.0
+offset_left = 1168.0
+offset_top = 110.0
+offset_right = 1320.0
+offset_bottom = 185.0
 theme_override_font_sizes/font_size = 48
-text = "测试
+text = "简谐
+"
+
+[node name="Test2" type="Button" parent="CanvasLayer/ColorRect"]
+layout_mode = 0
+offset_left = 1168.0
+offset_top = 203.0
+offset_right = 1320.0
+offset_bottom = 278.0
+theme_override_font_sizes/font_size = 48
+text = "单摆
 "
 
 [node name="DurationLabel" type="Label" parent="CanvasLayer/ColorRect"]
@@ -298,6 +308,7 @@ text = "动画序列
 
 [connection signal="pressed" from="CanvasLayer/ColorRect/ResetButton" to="." method="_on_reset_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/ColorRect/Test" to="." method="_on_test_pressed"]
+[connection signal="pressed" from="CanvasLayer/ColorRect/Test2" to="." method="_on_test_2_pressed"]
 [connection signal="pressed" from="CanvasLayer/ColorRect/Move/Button" to="." method="_on_move_to_pressed"]
 [connection signal="pressed" from="CanvasLayer/ColorRect/Move/Button2" to="." method="_on_move_by_pressed"]
 [connection signal="pressed" from="CanvasLayer/ColorRect/Rotate/Button" to="." method="_on_rotate_to_pressed"]

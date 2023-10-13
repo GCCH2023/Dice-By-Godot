@@ -56,29 +56,29 @@ class GCAnimation:
 	func on_finished():
 		is_finished = true
 		emit_signal("finished")
-		
-	# 处理动画细节
-	func process(delta:float):
-		# 计算插值因子（0到1之间）
-		var t = clamp(timer / duration, 0, 1) # 限制在0到1之间
-		change(t)
 	
 	# 播放完一次动画之后调用, 接下来将开始下一轮循环或播放翻转动画
 	# 根据 is_flipping 的值来判断是要播放翻转动画还是要播放下一轮循环
 	func before_next():
 		pass
 		
-	# 更新动画计时器
-	func update_timer(delta:float):
+	# 对时间进行变换
+	# 返回值影响节点的属性, 返回0, 表示初值
+	# 返回 1 表示目标值
+	# 返回 -1,表示目标的相反值, 其他值就是倍数
+	# 比如 x 坐标, 当前值 = (x1 - x0) * update_timer()
+	func update_timer(delta:float)->float:
+		# 计算插值因子（0到1之间）
+		return clamp(timer / duration, 0, 1) # 限制在0到1之间
+		
+	# delta 是 _process 的参数
+	func update(delta:float):
 		if !is_flipping:
 			timer += delta
 		else:
 			timer -= delta
-		
-	# delta 是 _process 的参数
-	func update(delta:float):
-		update_timer(delta)
-		process(delta)
+		var t = update_timer(timer)
+		change(t)
 		
 		# 动画完成后重置计时器
 		if timer >= duration:
@@ -199,13 +199,18 @@ func remove_anim(anim:GCAnimation):
 		head = next
 	if anim == tail:
 		tail = prev
+		
+# 清除所有动画
+func clear_anims():
+	while head != null:
+		remove_anim(tail)
 
 # 移动节点的动画
 class MoveTo extends TargetAnimation:
 
 	func _init(node:Node2D, target:Vector2, duration:float=1, is_flip:bool=false, loop_count:int=1):
 		super._init(node, "position", node.position, target, duration, is_flip, loop_count)
-		
+
 # 移动节点的动画
 class MoveBy extends DeltaAnimation:
 
@@ -428,6 +433,8 @@ func sequence(anims:Array, is_flip:bool=false, loop_count:int=1):
 	
 	
 func _process(delta):
+	if head == null:
+		return
 	var anim:GCAnimation = head
 	while anim != null:
 		var next = anim.next
