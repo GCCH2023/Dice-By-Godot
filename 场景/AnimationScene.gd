@@ -85,3 +85,7 @@ func _on_reset_button_pressed():
 func _on_skey_by_pressed():
 	# 倾斜变化量角度
 	AnimationManager.skew_by($Sprite2D, -15, get_duration(), get_flip(), get_loop_count())
+
+
+func _on_test_pressed():
+	$Sprite2D.set("position", Vector2(500, 500))

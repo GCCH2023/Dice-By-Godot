@@ -147,6 +147,16 @@ theme_override_font_sizes/font_size = 48
 text = "重置
 "
 
+[node name="Test" type="Button" parent="CanvasLayer/ColorRect"]
+layout_mode = 0
+offset_left = 1414.0
+offset_top = 23.0
+offset_right = 1566.0
+offset_bottom = 98.0
+theme_override_font_sizes/font_size = 48
+text = "测试
+"
+
 [node name="DurationLabel" type="Label" parent="CanvasLayer/ColorRect"]
 layout_mode = 0
 offset_left = 242.0
@@ -287,6 +297,7 @@ text = "动画序列
 "
 
 [connection signal="pressed" from="CanvasLayer/ColorRect/ResetButton" to="." method="_on_reset_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/ColorRect/Test" to="." method="_on_test_pressed"]
 [connection signal="pressed" from="CanvasLayer/ColorRect/Move/Button" to="." method="_on_move_to_pressed"]
 [connection signal="pressed" from="CanvasLayer/ColorRect/Move/Button2" to="." method="_on_move_by_pressed"]
 [connection signal="pressed" from="CanvasLayer/ColorRect/Rotate/Button" to="." method="_on_rotate_to_pressed"]
