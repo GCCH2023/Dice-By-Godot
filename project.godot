@@ -23,6 +23,10 @@ AnimationManager="*res://脚本/AnimationManager.gd"
 window/size/viewport_width=2400
 window/size/viewport_height=1080
 
+[dotnet]
+
+project/assembly_name="Dice"
+
 [input]
 
 move_right={
