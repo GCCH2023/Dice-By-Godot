@@ -1,0 +1,8 @@
+Nes 模拟器 TsNes.cs 使用说明
+
+前提: 需要 Godot 4.1 Mono 版本, 将 nes rom文件放到res:// 下面, 并修改TsNes.cs 最下方的 Load 方法修改
+文件路径. 
+
+原理: TsNes.cs 每帧将游戏画面写入 Image, 接着创建 ImageTexture对象, 并设置Sprite2D节点的texture属性.
+
+步骤: 新建2D场景 => 添加 名为 "Sprite2D" 的Sprite2D节点, 将TsNes.cs附加到根节点上, 运行场景.
